@@ -1,0 +1,6 @@
+[submodule "src/glm"]
+	path = src/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "src/nanovg"]
+	path = src/nanovg
+	url = https://github.com/memononen/nanovg.git
