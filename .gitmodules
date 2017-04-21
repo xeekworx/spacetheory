@@ -7,6 +7,4 @@
 [submodule "src/stb"]
 	path = src/stb
 	url = https://github.com/nothings/stb.git
-[submodule "src/sdl2"]
-	path = src/sdl2
-	url = https://github.com/xeekworx/SDL2.git
+
