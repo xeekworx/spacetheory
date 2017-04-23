@@ -11,3 +11,6 @@
 [submodule "src/sdl2"]
 	path = src/sdl2
 	url = https://github.com/xeekworx/SDL2.git
+[submodule "src/logger"]
+	path = src/logger
+	url = https://github.com/xeekworx/logger.git
