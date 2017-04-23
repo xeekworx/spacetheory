@@ -18,6 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\application.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\application.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{20D7639C-A0B3-4365-83FA-368E5D906084}</ProjectGuid>
