@@ -2,14 +2,14 @@
 SETLOCAL
 SET use_staticsdl=1
 
-IF EXIST ..\src\sdl2\VisualC\Win32\Release ^
-IF EXIST ..\src\sdl2\VisualC\x64\Release ^
-IF EXIST ..\src\sdl2\VisualC\Win32\Debug ^
-IF EXIST ..\src\sdl2\VisualC\x64\Debug ^
-IF EXIST "..\src\sdl2\VisualC\Win32\Debug [Static]" ^
-IF EXIST "..\src\sdl2\VisualC\x64\Debug [Static]" ^
-IF EXIST "..\src\sdl2\VisualC\Win32\Release [Static]" ^
-IF EXIST "..\src\sdl2\VisualC\x64\Release [Static]" (
+IF EXIST ..\src\third-party\sdl2\VisualC\Win32\Release ^
+IF EXIST ..\src\third-party\sdl2\VisualC\x64\Release ^
+IF EXIST ..\src\third-party\sdl2\VisualC\Win32\Debug ^
+IF EXIST ..\src\third-party\sdl2\VisualC\x64\Debug ^
+IF EXIST "..\src\third-party\sdl2\VisualC\Win32\Debug [Static]" ^
+IF EXIST "..\src\third-party\sdl2\VisualC\x64\Debug [Static]" ^
+IF EXIST "..\src\third-party\sdl2\VisualC\Win32\Release [Static]" ^
+IF EXIST "..\src\third-party\sdl2\VisualC\x64\Release [Static]" (
  GOTO choice
 ) ELSE (
  ECHO You must build SDL before running this!
@@ -39,43 +39,43 @@ if not exist x64\Release mkdir x64\Release
 
 IF %use_staticsdl%==1 (
  ECHO Copying SDL2 static libraries...
- xcopy "..\src\sdl2\VisualC\Win32\Debug [Static]\SDL2.lib" "x86\Debug\" /C /Q /Y
- xcopy "..\src\sdl2\VisualC\Win32\Release [Static]\SDL2.lib" "x86\Release\" /C /Q /Y
- xcopy "..\src\sdl2\VisualC\x64\Debug [Static]\SDL2.lib" "x64\Debug\" /C /Q /Y
- xcopy "..\src\sdl2\VisualC\x64\Release [Static]\SDL2.lib" "x64\Release\" /C /Q /Y
+ xcopy "..\src\third-party\sdl2\VisualC\Win32\Debug [Static]\SDL2.lib" "x86\Debug\" /C /Q /Y
+ xcopy "..\src\third-party\sdl2\VisualC\Win32\Release [Static]\SDL2.lib" "x86\Release\" /C /Q /Y
+ xcopy "..\src\third-party\sdl2\VisualC\x64\Debug [Static]\SDL2.lib" "x64\Debug\" /C /Q /Y
+ xcopy "..\src\third-party\sdl2\VisualC\x64\Release [Static]\SDL2.lib" "x64\Release\" /C /Q /Y
 ) ELSE (
  ECHO Copying SDL2 shared libraries and files ...
  
-IF NOT EXIST ..\src\sdl2\VisualC\Win32\Release\SDL2.dll ^
-IF NOT EXIST ..\src\sdl2\VisualC\x64\Release\SDL2.dll ^
-IF NOT EXIST ..\src\sdl2\VisualC\Win32\Debug\SDL2.dll ^
-IF NOT EXIST ..\src\sdl2\VisualC\x64\Debug\SDL2.dll (
+IF NOT EXIST ..\src\third-party\sdl2\VisualC\Win32\Release\SDL2.dll ^
+IF NOT EXIST ..\src\third-party\sdl2\VisualC\x64\Release\SDL2.dll ^
+IF NOT EXIST ..\src\third-party\sdl2\VisualC\Win32\Debug\SDL2.dll ^
+IF NOT EXIST ..\src\third-party\sdl2\VisualC\x64\Debug\SDL2.dll (
  ECHO You need to build the shared libraries, they do not exist.
  PAUSE
  GOTO:EOF
 )
  
- xcopy ..\src\sdl2\VisualC\Win32\Debug\SDL2.lib x86\Debug\ /C /Q /Y
- xcopy ..\src\sdl2\VisualC\Win32\Debug\SDL2.dll x86\Debug\ /C /Q /Y
- xcopy ..\src\sdl2\VisualC\Win32\Debug\SDL2.pdb x86\Debug\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\Win32\Debug\SDL2.lib x86\Debug\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\Win32\Debug\SDL2.dll x86\Debug\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\Win32\Debug\SDL2.pdb x86\Debug\ /C /Q /Y
 
- xcopy ..\src\sdl2\VisualC\Win32\Release\SDL2.lib x86\Release\ /C /Q /Y
- xcopy ..\src\sdl2\VisualC\Win32\Release\SDL2.dll x86\Release\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\Win32\Release\SDL2.lib x86\Release\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\Win32\Release\SDL2.dll x86\Release\ /C /Q /Y
 
- xcopy ..\src\sdl2\VisualC\x64\Debug\SDL2.lib x64\Debug\ /C /Q /Y
- xcopy ..\src\sdl2\VisualC\x64\Debug\SDL2.dll x64\Debug\ /C /Q /Y
- xcopy ..\src\sdl2\VisualC\x64\Debug\SDL2.pdb x64\Debug\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\x64\Debug\SDL2.lib x64\Debug\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\x64\Debug\SDL2.dll x64\Debug\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\x64\Debug\SDL2.pdb x64\Debug\ /C /Q /Y
 
- xcopy ..\src\sdl2\VisualC\x64\Release\SDL2.lib x64\Release\ /C /Q /Y
- xcopy ..\src\sdl2\VisualC\x64\Release\SDL2.dll x64\Release\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\x64\Release\SDL2.lib x64\Release\ /C /Q /Y
+ xcopy ..\src\third-party\sdl2\VisualC\x64\Release\SDL2.dll x64\Release\ /C /Q /Y
 )
 
 ECHO Copying SDL2main libraries ...
 
-xcopy ..\src\sdl2\VisualC\Win32\Debug\SDL2main.lib x86\Debug\ /C /Q /Y
-xcopy ..\src\sdl2\VisualC\Win32\Release\SDL2main.lib x86\Release\ /C /Q /Y
-xcopy ..\src\sdl2\VisualC\x64\Debug\SDL2main.lib x64\Debug\ /C /Q /Y
-xcopy ..\src\sdl2\VisualC\x64\Release\SDL2main.lib x64\Release\ /C /Q /Y
+xcopy ..\src\third-party\sdl2\VisualC\Win32\Debug\SDL2main.lib x86\Debug\ /C /Q /Y
+xcopy ..\src\third-party\sdl2\VisualC\Win32\Release\SDL2main.lib x86\Release\ /C /Q /Y
+xcopy ..\src\third-party\sdl2\VisualC\x64\Debug\SDL2main.lib x64\Debug\ /C /Q /Y
+xcopy ..\src\third-party\sdl2\VisualC\x64\Release\SDL2main.lib x64\Release\ /C /Q /Y
 
 :end
 ECHO Done.
