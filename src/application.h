@@ -13,7 +13,10 @@ namespace spacetheory {
 		int start(int argc, char *argv[]);
 
 	protected:
-		virtual int on_start(const std::vector<std::string>& args) = 0;
+		virtual bool on_start(const std::vector<std::string>& args, int& exitcode) = 0;
+
+	private:
+		void run();
 	};
 
 }
