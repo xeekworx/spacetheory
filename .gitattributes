@@ -1,0 +1,4 @@
+# Prevent this repository from inappropriately being marked for the programming langauge C
+src/sdl2/* linguist-vendored
+src/nanovg/* linguist-vendored
+src/glm/* linguist-vendored
