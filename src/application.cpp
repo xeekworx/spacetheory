@@ -1,4 +1,5 @@
 #include "application.h"
+#include "version.h"
 #include <logger.h>
 #include <SDL.h>
 
@@ -7,15 +8,16 @@ using namespace spacetheory;
 application::application()
 {
 	xeekworx::logger::config log_config = xeekworx::logger::default_config();
+	log_config.file = SPACETHEORY_LOGFILE;
 	log_config.enable = true;
 	xeekworx::log.enable(log_config);
 
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::INFO << "Application constructed" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::INFO << L"Application constructed" << std::endl;
 }
 
 application::~application()
 {
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::INFO << "Application destructed" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::INFO << L"Application destructed" << std::endl;
 }
 
 int application::start(int argc, char *argv[])
