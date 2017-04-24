@@ -24,25 +24,25 @@
     <ClInclude Include="..\..\include\spacetheory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\logger\logger.h">
-      <Filter>xeekworx::logger</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\version_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\third-party\logger\logger.h">
+      <Filter>xeekworx::logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\logger\logger.cpp">
-      <Filter>xeekworx::logger</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\version.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\third-party\logger\logger.cpp">
+      <Filter>xeekworx::logger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
