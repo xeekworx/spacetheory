@@ -18,3 +18,6 @@
 	path = src/third-party/logger
 
 	url = https://github.com/xeekworx/logger.git
+[submodule "tools/autoversion"]
+	path = tools/autoversion
+	url = https://github.com/xeekworx/autoversion.git
