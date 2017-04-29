@@ -22,12 +22,14 @@
     <ClInclude Include="..\..\include\spacetheory.h" />
     <ClInclude Include="..\..\src\application.h" />
     <ClInclude Include="..\..\src\third-party\logger\logger.h" />
+    <ClInclude Include="..\..\src\tools.h" />
     <ClInclude Include="..\..\src\version.h" />
     <ClInclude Include="..\..\src\version_defs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\application.cpp" />
     <ClCompile Include="..\..\src\third-party\logger\logger.cpp" />
+    <ClCompile Include="..\..\src\tools.cpp" />
     <ClCompile Include="..\..\src\version.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

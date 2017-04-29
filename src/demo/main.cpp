@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
 	demo_application * app = new demo_application();
 
-	int exitcode = app->start(argc, argv);
+	int exitcode = app->run(argc, argv);
 
 	delete app;
 	app = nullptr;

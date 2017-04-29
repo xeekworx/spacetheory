@@ -10,13 +10,17 @@ namespace spacetheory {
 		application();
 		virtual ~application();
 
-		int start(int argc, char *argv[]);
+		int run(int argc, char *argv[]);
 
 	protected:
 		virtual bool on_start(const std::vector<std::string>& args, int& exitcode) = 0;
 
 	private:
-		void run();
+		static spacetheory::application * s_app;
+
+		bool setup_apis();
+		void close_apis();
+		void game_loop();
 	};
 
 }
