@@ -115,7 +115,7 @@
     </Link>
     <PreBuildEvent>
       <Command>echo "Updating version definitions using Xeekworx Autoversion ..."
-python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION</Command>
+python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION --version --bdate_macro SPACETHEORY_BUILDDATE</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>AutoVersion Python Script</Message>
@@ -136,7 +136,7 @@ python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir
     </Link>
     <PreBuildEvent>
       <Command>echo "Updating version definitions using Xeekworx Autoversion ..."
-python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION</Command>
+python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION --version --bdate_macro SPACETHEORY_BUILDDATE</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>AutoVersion Python Script</Message>
@@ -161,7 +161,7 @@ python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir
     </Link>
     <PreBuildEvent>
       <Command>echo "Updating version definitions using Xeekworx Autoversion ..."
-python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION</Command>
+python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION --version --bdate_macro SPACETHEORY_BUILDDATE</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>AutoVersion Python Script</Message>
@@ -186,7 +186,7 @@ python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir
     </Link>
     <PreBuildEvent>
       <Command>echo "Updating version definitions using Xeekworx Autoversion ..."
-python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION</Command>
+python.exe "$(SolutionDir)..\..\tools\autoversion\autoversion.py" "$(SolutionDir)..\..\src\version_defs.h" SPACETHEORY_PRODUCTVERSION SPACETHEORY_STRPRODUCTVERSION --version --bdate_macro SPACETHEORY_BUILDDATE</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>AutoVersion Python Script</Message>

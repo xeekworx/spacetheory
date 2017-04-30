@@ -53,6 +53,11 @@ application::application()
 	xeekworx::log << xeekworx::INFO << L"Developed by " << SPACETHEORY_COMPANY << std::endl;
 	xeekworx::log << xeekworx::INFO << L"Platform Architecture: " << SPACETHEORY_ARCH_STR << std::endl;
 	xeekworx::log << xeekworx::INFO << L"Build Configuration: " << SPACETHEORY_CONFIG << std::endl;
+	xeekworx::log << xeekworx::INFO << L"Build Date: " << get_builddate().c_str() << std::endl;
+	SDL_version sdlvn = {};
+	SDL_GetVersion(&sdlvn);
+	xeekworx::log << xeekworx::INFO << L"SDL Version: " << sdlvn.major << L"." << sdlvn.minor << L"." << sdlvn.patch << std::endl;
+
 	xeekworx::log << std::endl;
 
 	// NORMAL LOGGING BEGINS:
@@ -128,9 +133,6 @@ int application::run(int argc, char *argv[])
 bool application::setup_apis()
 {
 	// INITIALIZE SDL:
-	SDL_version sdlvn = {};
-	SDL_GetVersion(&sdlvn);
-	xeekworx::log << LOGSTAMP << xeekworx::INFO << L"SDL Version: " << sdlvn.major << L"." << sdlvn.minor << L"." << sdlvn.patch << std::endl;
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		xeekworx::log << LOGSTAMP << xeekworx::ERR << L"SDL Initialization Failed (" << SDL_GetError() << L")" << std::endl;
 		return false;
