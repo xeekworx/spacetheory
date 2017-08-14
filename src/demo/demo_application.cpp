@@ -14,7 +14,7 @@ demo_application::~demo_application()
 	applog << LOGSTAMP << xeekworx::DEBUG << L"Demo Application Destructed" << std::endl;
 }
 
-bool demo_application::on_start(const std::vector<std::string>& args, int & exitcode)
+bool demo_application::on_start(const std::vector<std::string>& args)
 {
 	applog << LOGSTAMP << xeekworx::DEBUG << L"Starting." << std::endl;
 	return true;

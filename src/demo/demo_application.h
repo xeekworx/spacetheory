@@ -12,6 +12,6 @@ public:
 	virtual ~demo_application();
 
 protected:
-	bool on_start(const std::vector<std::string>& args, int& exitcode) override;
+	bool on_start(const std::vector<std::string>& args) override;
 };
 

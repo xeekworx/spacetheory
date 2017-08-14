@@ -13,7 +13,7 @@ namespace spacetheory {
 
 using namespace spacetheory;
 
-application::application()
+application::application() : m_should_quit(false)
 {
 #ifdef _WIN32
 	// IF THE APPLICATION HAS A CONSOLE WINDOW, ENSURE IT ISN'T CLOSED
@@ -46,7 +46,7 @@ application::application()
 	// Do so without timestamps, etc.
 	xeekworx::log.set_msgonly(true);
 	version vn = get_version();
-	xeekworx::log << xeekworx::INFO << L"Welcome to " << SPACETHEORY_PRODUCTNAME << L" Version "
+	xeekworx::log << xeekworx::INFO << L"Welcome to " << SPACETHEORY_PRODUCTNAME << L" Engine, Version "
 		<< vn.major << L"." << vn.minor << L"." << vn.revision << L" " << SPACETHEORY_DEVSTAGE;
 	xeekworx::log << xeekworx::INFO << L" (Build " << vn.build << L")";
 	xeekworx::log << std::endl;
@@ -84,9 +84,11 @@ int application::run(int argc, char *argv[])
 	for (int i = 0; i < argc; ++i) args.push_back(argv[i]);
 
 	// Log command-line:
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Command-Line:" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Command-Line ..." << std::endl;
+	unsigned i = 1;
 	for (const auto &arg : args) {
-		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"+ " <<  arg.c_str() << L"" << std::endl;
+		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Arg " << i << L" [" <<  arg.c_str() << L"]" << std::endl;
+		++i;
 	}
 
 	// INITIALIZE APIS:
@@ -101,12 +103,13 @@ int application::run(int argc, char *argv[])
 	}
 
 	// APPLICATION'S START:
-	// Where the game's initialization magic really happens. Game windows
+	// Where the game's startup magic really happens. Game windows
 	// are created here.
-	if (!on_start(args, exitcode)) {
+	if (!on_start(args)) {
 		const char * msg = "Application failed to start!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, SPACETHEORY_FILEDESC, msg, NULL);
+		exitcode = 1;
 	}
 	else {
 		// STOPWATCH:
@@ -153,5 +156,45 @@ void application::game_loop()
 {
 	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << L"Game Loop Started" << std::endl;
 
-	// Nothing here yet.
+	while (!this->m_should_quit) {
+		// Empty the event queue entirely:
+		if (!event_loop()) break;
+
+		// Rendering magic:
+		on_frame();
+	}
+
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << L"Game Loop Ended" << std::endl;
+}
+
+bool application::event_loop()
+{
+	static SDL_Event e = {};
+	while (SDL_PollEvent(&e)) {
+		switch (e.type) {
+		case SDL_QUIT:
+			return false;
+		case SDL_KEYUP:
+		case SDL_KEYDOWN:
+			if (e.key.keysym.sym == SDLK_ESCAPE) return false;
+			break;
+		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEBUTTONDOWN:
+			break;
+		case SDL_MOUSEMOTION:
+			break;
+		case SDL_MOUSEWHEEL:
+			break;
+		case SDL_WINDOWEVENT:
+			break;
+		}
+	}
+
+	// Return true to keep the game loop running.
+	return true;
+}
+
+void application::on_frame()
+{
+
 }
