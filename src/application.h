@@ -11,6 +11,7 @@ namespace spacetheory {
 		virtual ~application();
 
 		int run(int argc, char *argv[]);
+		void shutdown();
 
 	protected:
 		virtual bool on_start(const std::vector<std::string>& args) = 0;

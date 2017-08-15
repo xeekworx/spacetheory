@@ -62,12 +62,12 @@ application::application() : m_should_quit(false)
 
 	// NORMAL LOGGING BEGINS:
 	xeekworx::log.set_msgonly(false);
-	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << L"Application Constructed" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << L"Application Constructed" << std::endl;
 }
 
 application::~application()
 {
-	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << L"Application Destructed" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << L"Application Destructed" << std::endl;
 }
 
 int application::run(int argc, char *argv[])
@@ -150,6 +150,12 @@ void application::close_apis()
 	// UNINITIALIZE SDL:
 	SDL_Quit();
 	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << L"SDL Shutdown" << std::endl;
+}
+
+void application::shutdown()
+{
+	m_should_quit = true;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << L"Shutdown called!" << std::endl;
 }
 
 void application::game_loop()
