@@ -57,7 +57,14 @@ application::application() : m_should_quit(false)
 	xeekworx::log << xeekworx::INFO << "Build Date: " << get_builddate().c_str() << std::endl;
 	SDL_version sdlvn = {};
 	SDL_GetVersion(&sdlvn);
-	xeekworx::log << xeekworx::INFO << "SDL Version: " << sdlvn.major << "." << sdlvn.minor << "." << sdlvn.patch << std::endl;
+	// I have to cast version values as unsigned int or they'll be displayed as characters
+	xeekworx::log << xeekworx::INFO << "SDL Version: " 
+		<< static_cast<unsigned>(sdlvn.major)
+		<< "." 
+		<< static_cast<unsigned>(sdlvn.minor)
+		<< "." 
+		<< static_cast<unsigned>(sdlvn.patch)
+		<< std::endl;
 
 	xeekworx::log << std::endl;
 
