@@ -14,7 +14,7 @@ namespace spacetheory {
 
 using namespace spacetheory;
 
-application::application() : m_should_quit(false)
+application::application()
 {
 #ifdef _WIN32
 	// IF THE APPLICATION HAS A CONSOLE WINDOW, ENSURE IT ISN'T CLOSED
@@ -111,27 +111,39 @@ int application::run(int argc, char *argv[])
 	}
 
 	// APPLICATION'S START:
-	// Where the game's startup magic really happens. Game windows
-	// are created here.
-	if (!on_start(args)) {
+	// Where the game's startup magic really happens. Game window setup is 
+	// done here.
+	auto display_setup = std::make_shared<display::setup>();
+	if (!on_start(args, display_setup)) {
 		const char * msg = "Application failed to start!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, SPACETHEORY_FILEDESC, msg, NULL);
 		exitcode = 1;
 	}
 	else {
-		// STOPWATCH:
-		auto end_clock = tools::clock::now();
-		xeekworx::log << LOGSTAMP << "Startup took " << tools::friendly_duration(start_clock, end_clock) << " to complete" << std::endl;
+		// CREATE DISPLAY (GAME WINDOW):
+		if (!create_display(display_setup)) {
+			// create_display should take care of any error messages.
+			exitcode = 1;
+		}
+		else {
+			// STOPWATCH:
+			auto end_clock = tools::clock::now();
+			xeekworx::log << LOGSTAMP << "Startup took " << tools::friendly_duration(start_clock, end_clock) << " to complete" << std::endl;
 
-		// GAME LOOP:
-		game_loop();
+			// GAME LOOP:
+			game_loop();
+		}
 	}
 
 	// SHUTDOWN:
 	auto start_shutdown_clock = tools::clock::now();
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Shutting down APIs ..." << std::endl;
 	close_apis();
+	if (m_display) { // Destroy the game window
+		delete m_display;
+		m_display = nullptr;
+	}
 	xeekworx::log << LOGSTAMP << "Shutdown took " << tools::friendly_duration(start_shutdown_clock, tools::clock::now()) << " to complete" << std::endl;
 
 	// STOPWATCH:
@@ -139,6 +151,21 @@ int application::run(int argc, char *argv[])
 
 	// Returns 0 for success
 	return exitcode;
+}
+
+bool application::create_display(std::shared_ptr<display::setup> display_setup)
+{
+	try {
+		this->m_display = new spacetheory::display(display_setup);
+	}
+	catch (...) {
+		const std::string msg = "Failed to create display (game window)!";
+		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, SPACETHEORY_FILEDESC, msg.c_str(), NULL);
+		return false;
+	}
+
+	return true;
 }
 
 bool application::setup_apis()
