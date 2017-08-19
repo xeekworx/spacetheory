@@ -4,9 +4,9 @@
 
 using namespace spacetheory;
 
-std::wstring spacetheory::tools::friendly_duration(const clock::time_point& start, const clock::time_point& end, const bool abbreviate)
+std::string spacetheory::tools::friendly_duration(const clock::time_point& start, const clock::time_point& end, const bool abbreviate)
 {
-	std::wstringstream result;
+	std::stringstream result;
 
 	using day_t = std::chrono::duration<long, std::ratio<3600 * 24>>;
 
@@ -17,24 +17,24 @@ std::wstring spacetheory::tools::friendly_duration(const clock::time_point& star
 	auto s = std::chrono::duration_cast<std::chrono::seconds>(dur -= m);
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur -= s);
 
-	struct tmp { long long count; std::wstring name; };
+	struct tmp { long long count; std::string name; };
 	std::vector<tmp> dur_vec;
 
-	dur_vec.push_back({ d.count(), abbreviate ? L"day" : L"day" });
-	dur_vec.push_back({ h.count(), abbreviate ? L"hr" : L"hour" });
-	dur_vec.push_back({ m.count(), abbreviate ? L"min" : L"minute" });
-	dur_vec.push_back({ s.count(), abbreviate ? L"sec" : L"second" });
-	dur_vec.push_back({ ms.count(), abbreviate ? L"ms" : L"millisecond" });
+	dur_vec.push_back({ d.count(), abbreviate ? "day" : "day" });
+	dur_vec.push_back({ h.count(), abbreviate ? "hr" : "hour" });
+	dur_vec.push_back({ m.count(), abbreviate ? "min" : "minute" });
+	dur_vec.push_back({ s.count(), abbreviate ? "sec" : "second" });
+	dur_vec.push_back({ ms.count(), abbreviate ? "ms" : "millisecond" });
 
 	bool first = true;
 	for (const auto &x : dur_vec) {
 		if (x.count <= 0) continue;
 		if (!first) { // Only put a separator in front of other names
-			result << L" ";
+			result << " ";
 		}
-		result << x.count << L" " << x.name;
+		result << x.count << " " << x.name;
 		// Name plurality:
-		if ((!abbreviate || x.name == L"day") && x.count > 1) result << L"s";
+		if ((!abbreviate || x.name == "day") && x.count > 1) result << "s";
 		first = false;
 	}
 

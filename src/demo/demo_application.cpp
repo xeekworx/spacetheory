@@ -6,16 +6,16 @@ demo_application::demo_application()
 	logconfig.output_to_file = true;
 	applog.enable(logconfig);
 
-	applog << LOGSTAMP << xeekworx::DEBUG << L"Demo Application Constructed" << std::endl;
+	applog << LOGSTAMP << xeekworx::DEBUG << "Demo Application Constructed" << std::endl;
 }
 
 demo_application::~demo_application()
 {
-	applog << LOGSTAMP << xeekworx::DEBUG << L"Demo Application Destructed" << std::endl;
+	applog << LOGSTAMP << xeekworx::DEBUG << "Demo Application Destructed" << std::endl;
 }
 
 bool demo_application::on_start(const std::vector<std::string>& args)
 {
-	applog << LOGSTAMP << xeekworx::DEBUG << L"Starting." << std::endl;
+	applog << LOGSTAMP << xeekworx::DEBUG << "Starting." << std::endl;
 	return true;
 }

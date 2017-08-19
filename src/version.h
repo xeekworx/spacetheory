@@ -7,5 +7,5 @@ namespace spacetheory {
 	struct version { unsigned int major, minor, revision, build;  };
 
 	version get_version();
-	std::wstring get_builddate();
+	std::string get_builddate();
 }

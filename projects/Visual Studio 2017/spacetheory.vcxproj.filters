@@ -36,6 +36,12 @@
     <ClInclude Include="..\..\src\tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\display.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\application.cpp">
@@ -48,6 +54,9 @@
       <Filter>xeekworx::logger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\tools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\display.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,6 +6,7 @@
 #include <Windows.h>
 #endif
 #include "tools.h"
+#include "error.h"
 
 namespace spacetheory {
 	application * application::s_app = nullptr;
@@ -32,7 +33,7 @@ application::application() : m_should_quit(false)
 		const char * msg = "Only one application object can be created!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, SPACETHEORY_FILEDESC, msg, NULL);
-		throw std::exception();
+		throw spacetheory::error(msg);
 	}
 
 	// SETUP LOGGING:
@@ -46,28 +47,28 @@ application::application() : m_should_quit(false)
 	// Do so without timestamps, etc.
 	xeekworx::log.set_msgonly(true);
 	version vn = get_version();
-	xeekworx::log << xeekworx::INFO << L"Welcome to " << SPACETHEORY_PRODUCTNAME << L" Engine, Version "
-		<< vn.major << L"." << vn.minor << L"." << vn.revision << L" " << SPACETHEORY_DEVSTAGE;
-	xeekworx::log << xeekworx::INFO << L" (Build " << vn.build << L")";
+	xeekworx::log << xeekworx::INFO << "Welcome to " << SPACETHEORY_PRODUCTNAME << " Engine, Version "
+		<< vn.major << "." << vn.minor << "." << vn.revision << " " << SPACETHEORY_DEVSTAGE;
+	xeekworx::log << xeekworx::INFO << " (Build " << vn.build << ")";
 	xeekworx::log << std::endl;
-	xeekworx::log << xeekworx::INFO << L"Developed by " << SPACETHEORY_COMPANY << std::endl;
-	xeekworx::log << xeekworx::INFO << L"Platform Architecture: " << SPACETHEORY_ARCH_STR << std::endl;
-	xeekworx::log << xeekworx::INFO << L"Build Configuration: " << SPACETHEORY_CONFIG << std::endl;
-	xeekworx::log << xeekworx::INFO << L"Build Date: " << get_builddate().c_str() << std::endl;
+	xeekworx::log << xeekworx::INFO << "Developed by " << SPACETHEORY_COMPANY << std::endl;
+	xeekworx::log << xeekworx::INFO << "Platform Architecture: " << SPACETHEORY_ARCH_STR << std::endl;
+	xeekworx::log << xeekworx::INFO << "Build Configuration: " << SPACETHEORY_CONFIG << std::endl;
+	xeekworx::log << xeekworx::INFO << "Build Date: " << get_builddate().c_str() << std::endl;
 	SDL_version sdlvn = {};
 	SDL_GetVersion(&sdlvn);
-	xeekworx::log << xeekworx::INFO << L"SDL Version: " << sdlvn.major << L"." << sdlvn.minor << L"." << sdlvn.patch << std::endl;
+	xeekworx::log << xeekworx::INFO << "SDL Version: " << sdlvn.major << "." << sdlvn.minor << "." << sdlvn.patch << std::endl;
 
 	xeekworx::log << std::endl;
 
 	// NORMAL LOGGING BEGINS:
 	xeekworx::log.set_msgonly(false);
-	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << L"Application Constructed" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "Application Constructed" << std::endl;
 }
 
 application::~application()
 {
-	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << L"Application Destructed" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "Application Destructed" << std::endl;
 }
 
 int application::run(int argc, char *argv[])
@@ -84,15 +85,15 @@ int application::run(int argc, char *argv[])
 	for (int i = 0; i < argc; ++i) args.push_back(argv[i]);
 
 	// Log command-line:
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Command-Line ..." << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Command-Line ..." << std::endl;
 	unsigned i = 1;
 	for (const auto &arg : args) {
-		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Arg " << i << L" [" <<  arg.c_str() << L"]" << std::endl;
+		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Arg " << i << " [" <<  arg.c_str() << "]" << std::endl;
 		++i;
 	}
 
 	// INITIALIZE APIS:
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Setting up APIs ..." << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Setting up APIs ..." << std::endl;
 	if (!setup_apis()) {
 		const char * msg = "Failed to setup apis!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
@@ -114,7 +115,7 @@ int application::run(int argc, char *argv[])
 	else {
 		// STOPWATCH:
 		auto end_clock = tools::clock::now();
-		xeekworx::log << LOGSTAMP << L"Startup took " << tools::friendly_duration(start_clock, end_clock) << L" to complete" << std::endl;
+		xeekworx::log << LOGSTAMP << "Startup took " << tools::friendly_duration(start_clock, end_clock) << " to complete" << std::endl;
 
 		// GAME LOOP:
 		game_loop();
@@ -122,12 +123,12 @@ int application::run(int argc, char *argv[])
 
 	// SHUTDOWN:
 	auto start_shutdown_clock = tools::clock::now();
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << L"Shutting down APIs ..." << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Shutting down APIs ..." << std::endl;
 	close_apis();
-	xeekworx::log << LOGSTAMP << L"Shutdown took " << tools::friendly_duration(start_shutdown_clock, tools::clock::now()) << L" to complete" << std::endl;
+	xeekworx::log << LOGSTAMP << "Shutdown took " << tools::friendly_duration(start_shutdown_clock, tools::clock::now()) << " to complete" << std::endl;
 
 	// STOPWATCH:
-	xeekworx::log << LOGSTAMP << L"Application uptime: " << tools::friendly_duration(start_clock, tools::clock::now()) << std::endl;
+	xeekworx::log << LOGSTAMP << "Application uptime: " << tools::friendly_duration(start_clock, tools::clock::now()) << std::endl;
 
 	// Returns 0 for success
 	return exitcode;
@@ -137,10 +138,10 @@ bool application::setup_apis()
 {
 	// INITIALIZE SDL:
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		xeekworx::log << LOGSTAMP << xeekworx::ERR << L"SDL Initialization Failed (" << SDL_GetError() << L")" << std::endl;
+		xeekworx::log << LOGSTAMP << xeekworx::ERR << "SDL Initialization Failed (" << SDL_GetError() << ")" << std::endl;
 		return false;
 	}
-	else xeekworx::log << LOGSTAMP << xeekworx::DEBUG << L"SDL Initialized Successfully" << std::endl;
+	else xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "SDL Initialized Successfully" << std::endl;
 
 	return true;
 }
@@ -149,18 +150,18 @@ void application::close_apis()
 {
 	// UNINITIALIZE SDL:
 	SDL_Quit();
-	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << L"SDL Shutdown" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "SDL Shutdown" << std::endl;
 }
 
 void application::shutdown()
 {
 	m_should_quit = true;
-	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << L"Shutdown called!" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "Shutdown called!" << std::endl;
 }
 
 void application::game_loop()
 {
-	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << L"Game Loop Started" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << "Game Loop Started" << std::endl;
 
 	while (!this->m_should_quit) {
 		// Empty the event queue entirely:
@@ -170,7 +171,7 @@ void application::game_loop()
 		on_frame();
 	}
 
-	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << L"Game Loop Ended" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << "Game Loop Ended" << std::endl;
 }
 
 bool application::event_loop()
