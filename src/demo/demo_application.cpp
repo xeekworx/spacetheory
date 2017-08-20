@@ -6,19 +6,21 @@ demo_application::demo_application()
 	logconfig.output_to_file = true;
 	applog.enable(logconfig);
 
-	applog << LOGSTAMP << xeekworx::DEBUG << "Demo Application Constructed" << std::endl;
+	applog << LOGSTAMP << xeekworx::DEBUG << "Demo application constructed" << std::endl;
 }
 
 demo_application::~demo_application()
 {
-	applog << LOGSTAMP << xeekworx::DEBUG << "Demo Application Destructed" << std::endl;
+	applog << LOGSTAMP << xeekworx::DEBUG << "Demo application destructed" << std::endl;
 }
 
-bool demo_application::on_start(const std::vector<std::string>& args, std::shared_ptr<spacetheory::display::setup> display_setup)
+bool demo_application::on_start(const std::vector<std::string>& args, std::shared_ptr<spacetheory::display_setup> setup)
 {
-	applog << LOGSTAMP << xeekworx::DEBUG << "Starting." << std::endl;
+	applog << LOGSTAMP << xeekworx::DEBUG << "Starting..." << std::endl;
 
-	display_setup->name = "Spacetheory Demo Application";
+	setup->on_screen = 0;
+	setup->mode = spacetheory::window_mode::windowed;
+	setup->name = "Spacetheory Demo Application";
 
 	return true;
 }

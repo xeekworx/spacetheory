@@ -12,6 +12,6 @@ public:
 	virtual ~demo_application();
 
 protected:
-	bool on_start(const std::vector<std::string>& args, std::shared_ptr<spacetheory::display::setup> display_setup) override;
+	bool on_start(const std::vector<std::string>& args, std::shared_ptr<spacetheory::display_setup> setup) override;
 };
 

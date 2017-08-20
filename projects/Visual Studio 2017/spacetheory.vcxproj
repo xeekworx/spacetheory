@@ -22,7 +22,12 @@
     <ClInclude Include="..\..\include\spacetheory.h" />
     <ClInclude Include="..\..\src\application.h" />
     <ClInclude Include="..\..\src\display.h" />
+    <ClInclude Include="..\..\src\display_mode.h" />
+    <ClInclude Include="..\..\src\display_setup.h" />
     <ClInclude Include="..\..\src\error.h" />
+    <ClInclude Include="..\..\src\point.h" />
+    <ClInclude Include="..\..\src\rectangle.h" />
+    <ClInclude Include="..\..\src\size.h" />
     <ClInclude Include="..\..\src\third-party\logger\logger.h" />
     <ClInclude Include="..\..\src\tools.h" />
     <ClInclude Include="..\..\src\version.h" />

@@ -1,63 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="xeekworx::logger">
+    <Filter Include="Version">
+      <UniqueIdentifier>{fb8df9cb-4a3c-4c56-81e9-c4c21c43d833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{29a7a2f2-545a-4b30-a755-4b7a7e048ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\xeekworx::logger">
       <UniqueIdentifier>{9fd24050-761c-42f5-a920-7df033fc6519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{ab3fe446-a194-4b6b-ada9-f8137551e0c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\spacetheory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\version.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\src\third-party\logger\logger.h">
+      <Filter>3rdparty\xeekworx::logger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\version_defs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Version</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\third-party\logger\logger.h">
-      <Filter>xeekworx::logger</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\tools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\display.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\src\version.h">
+      <Filter>Version</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\error.h">
-      <Filter>Header Files</Filter>
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\application.h" />
+    <ClInclude Include="..\..\src\display.h" />
+    <ClInclude Include="..\..\include\spacetheory.h" />
+    <ClInclude Include="..\..\src\tools.h" />
+    <ClInclude Include="..\..\src\point.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rectangle.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\size.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\display_setup.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\display_mode.h">
+      <Filter>Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\application.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\src\third-party\logger\logger.cpp">
+      <Filter>3rdparty\xeekworx::logger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\version.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Version</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\third-party\logger\logger.cpp">
-      <Filter>xeekworx::logger</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\tools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\src\application.cpp" />
+    <ClCompile Include="..\..\src\display.cpp" />
+    <ClCompile Include="..\..\src\tools.cpp" />
   </ItemGroup>
 </Project>
