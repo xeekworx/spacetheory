@@ -94,7 +94,7 @@ int application::run(int argc, char *argv[])
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Command-Line ..." << std::endl;
 	unsigned i = 1;
 	for (const auto &arg : args) {
-		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "arg " << i << " [" <<  arg.c_str() << "]" << std::endl;
+		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "> arg " << i << " [" <<  arg.c_str() << "]" << std::endl;
 		++i;
 	}
 
