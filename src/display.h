@@ -12,10 +12,9 @@ namespace spacetheory {
 	{
 		friend spacetheory::application;
 	private:
-		std::shared_ptr<display_setup> m_setup;
 		void * m_sdlwindow;
 
-		display(std::shared_ptr<display_setup> s);
+		display(const display_setup& setup);
 
 	public:
 		~display();

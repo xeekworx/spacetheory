@@ -5,28 +5,26 @@
 
 using namespace spacetheory;
 
-display::display(std::shared_ptr<display_setup> s) : m_sdlwindow(nullptr)
+display::display(const display_setup& setup) : m_sdlwindow(nullptr)
 {
-	this->m_setup = s;
-
 	// LOG BOUNDS:
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG << "Game window setup ..." << std::endl;
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG << "Bounds: "
-		<< m_setup->bounds.x << ", " << m_setup->bounds.y << ", "
-		<< m_setup->bounds.w << " x " << m_setup->bounds.h
+		<< setup.bounds.x << ", " << setup.bounds.y << ", "
+		<< setup.bounds.w << " x " << setup.bounds.h
 		<< std::endl;
 
 	// DETERMINE THE GAME WINDOW POSITION:
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG << "Positioning: ";
-	int x = m_setup->bounds.x, y = m_setup->bounds.y;
-	switch (m_setup->positioning) {
+	int x = setup.bounds.x, y = setup.bounds.y;
+	switch (setup.positioning) {
 	case window_positioning::centered:
-		x = y = SDL_WINDOWPOS_CENTERED_DISPLAY(m_setup->on_screen);
-		xeekworx::log << "Centered (on screen " << m_setup->on_screen << ")" << std::endl;
+		x = y = SDL_WINDOWPOS_CENTERED_DISPLAY(setup.on_screen);
+		xeekworx::log << "Centered (on screen " << setup.on_screen << ")" << std::endl;
 		break;
 	case window_positioning::undefined:
-		x = y = SDL_WINDOWPOS_UNDEFINED_DISPLAY(m_setup->on_screen);
-		xeekworx::log << "Undefined (on screen " << m_setup->on_screen << ")" << std::endl;
+		x = y = SDL_WINDOWPOS_UNDEFINED_DISPLAY(setup.on_screen);
+		xeekworx::log << "Undefined (on screen " << setup.on_screen << ")" << std::endl;
 		break;
 	case window_positioning::coordinates:
 		xeekworx::log << "Using Coordinates" << std::endl;
@@ -39,7 +37,7 @@ display::display(std::shared_ptr<display_setup> s) : m_sdlwindow(nullptr)
 	// FULL-SCREEN MODE:
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG << "Window Mode: ";
 	uint32_t wndflags = SDL_WINDOW_OPENGL;
-	switch (m_setup->mode) {
+	switch (setup.mode) {
 	case window_mode::native_fullscreen:
 		wndflags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		xeekworx::log << "Fullscreen Desktop" << std::endl;
@@ -57,11 +55,11 @@ display::display(std::shared_ptr<display_setup> s) : m_sdlwindow(nullptr)
 	}
 
 	// CREATE THE GAME WINDOW:
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Creating game window named '" << m_setup->name << "'" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Creating game window named '" << setup.name << "'" << std::endl;
 	m_sdlwindow = SDL_CreateWindow(
-		m_setup->name.c_str(), 
+		setup.name.c_str(), 
 		x, y, 
-		m_setup->bounds.w, m_setup->bounds.h,
+		setup.bounds.w, setup.bounds.h,
 		wndflags
 	);
 	if (m_sdlwindow == NULL) {

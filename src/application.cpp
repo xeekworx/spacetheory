@@ -112,7 +112,7 @@ int application::run(int argc, char *argv[])
 	// APPLICATION'S START:
 	// Where the game's startup magic really happens. Game window setup is 
 	// done here.
-	auto setup = std::make_shared<display_setup>();
+	display_setup setup;
 	if (!on_start(args, setup)) {
 		const char * msg = "Application failed to start!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
@@ -152,7 +152,7 @@ int application::run(int argc, char *argv[])
 	return exitcode;
 }
 
-bool application::create_display(std::shared_ptr<display_setup> setup)
+bool application::create_display(const display_setup& setup)
 {
 	try {
 		this->m_display = new spacetheory::display(setup);

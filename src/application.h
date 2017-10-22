@@ -19,7 +19,7 @@ namespace spacetheory {
 		display * display() { return m_display; }
 
 	protected:
-		virtual bool on_start(const std::vector<std::string>& args, std::shared_ptr<display_setup> setup) = 0;
+		virtual bool on_start(const std::vector<std::string>& args, display_setup& setup) = 0;
 		virtual void on_frame();
 
 	private:
@@ -27,7 +27,7 @@ namespace spacetheory {
 		spacetheory::display * m_display = nullptr;
 		bool m_should_quit = false;
 
-		bool create_display(std::shared_ptr<display_setup> setup);
+		bool create_display(const display_setup& setup);
 		bool setup_apis();
 		void close_apis();
 
