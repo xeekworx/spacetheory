@@ -55,7 +55,7 @@ display::display(const display_setup& setup) : m_sdlwindow(nullptr)
 	}
 
 	// CREATE THE GAME WINDOW:
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Creating game window named '" << setup.name << "'" << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG << "Creating game window named '" << setup.name << "'" << std::endl;
 	m_sdlwindow = SDL_CreateWindow(
 		setup.name.c_str(), 
 		x, y, 

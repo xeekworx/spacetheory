@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "rectangle.h"
-#include "display_mode.h"
 
 namespace spacetheory {
 

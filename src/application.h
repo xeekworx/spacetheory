@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "display.h"
+#include "graphics_setup.h"
 
 namespace spacetheory {
 
@@ -19,7 +20,7 @@ namespace spacetheory {
 		display * display() { return m_display; }
 
 	protected:
-		virtual bool on_start(const std::vector<std::string>& args, display_setup& setup) = 0;
+		virtual bool on_start(const std::vector<std::string>& args, display_setup& disp_setup, graphics_setup& gfx_setup) = 0;
 		virtual void on_frame();
 
 	private:
@@ -27,9 +28,11 @@ namespace spacetheory {
 		spacetheory::display * m_display = nullptr;
 		bool m_should_quit = false;
 
-		bool create_display(const display_setup& setup);
-		bool setup_apis();
-		void close_apis();
+		bool create_display(const display_setup& disp_setup);
+		bool setup_apis1(); // stage 1, before any apis have initialized
+		bool setup_apis2(const graphics_setup& gfx_setup); // stage 2, before the window (display) is created
+		bool setup_apis3(const graphics_setup& gfx_setup); // stage 3, after the window (display) was created
+		void shutdown_apis();
 
 		void game_loop();
 		bool event_loop();

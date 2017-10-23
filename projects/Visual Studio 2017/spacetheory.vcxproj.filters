@@ -47,7 +47,7 @@
     <ClInclude Include="..\..\src\display_setup.h">
       <Filter>Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\display_mode.h">
+    <ClInclude Include="..\..\src\graphics_setup.h">
       <Filter>Types</Filter>
     </ClInclude>
   </ItemGroup>

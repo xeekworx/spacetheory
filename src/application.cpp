@@ -2,11 +2,15 @@
 #include "version.h"
 #include <logger.h>
 #include <SDL.h>
+//#include <SDL_opengl.h> // Do not include this when using glad
 #ifdef _WIN32
 #include <Windows.h>
 #endif
+#include <glad\glad.h>
 #include "tools.h"
 #include "error.h"
+#include <unordered_map>
+#include <iomanip>
 
 namespace spacetheory {
 	application * application::s_app = nullptr;
@@ -98,10 +102,10 @@ int application::run(int argc, char *argv[])
 		++i;
 	}
 
-	// INITIALIZE APIS:
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Setting up APIs ..." << std::endl;
-	if (!setup_apis()) {
-		const char * msg = "Failed to setup apis!";
+	// CONFIGURE APIS (STAGE 1):
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Configuring APIs (Stage 1) ..." << std::endl;
+	if (!setup_apis1()) {
+		const char * msg = "Failed in API Configuration Stage 1!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, SPACETHEORY_FILEDESC, msg, NULL);
 
@@ -110,22 +114,38 @@ int application::run(int argc, char *argv[])
 	}
 
 	// APPLICATION'S START:
-	// Where the game's startup magic really happens. Game window setup is 
-	// done here.
-	display_setup setup;
-	if (!on_start(args, setup)) {
+	// Where the game's startup magic really happens. Game window setup and 
+	// graphics setup are done here.
+	display_setup disp_setup;
+	graphics_setup gfx_setup;
+	if (!on_start(args, disp_setup, gfx_setup)) {
 		const char * msg = "Application failed to start!";
 		xeekworx::log << LOGSTAMP << xeekworx::logtype::FATAL << msg << std::endl;
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, SPACETHEORY_FILEDESC, msg, NULL);
 		exitcode = 1;
 	}
 	else {
+		// CONFIGURE APIS (STAGE 2):
+		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Configuring APIs (Stage 2) ..." << std::endl;
+		if (!setup_apis2(gfx_setup)) {
+			xeekworx::log << LOGSTAMP << xeekworx::logtype::WARNING << "Failed in API Configuration Stage 2!" << std::endl;
+			exitcode = 1;
+		}
+
 		// CREATE DISPLAY (GAME WINDOW):
-		if (!create_display(setup)) {
+		xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Creating display (game window) ..." << std::endl;
+		if (!create_display(disp_setup)) {
 			// create_display should take care of any error messages.
 			exitcode = 1;
 		}
 		else {
+			// CONFIGURE APIS (STAGE 3):
+			xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Configuring APIs (Stage 3) ..." << std::endl;
+			if (!setup_apis3(gfx_setup)) {
+				xeekworx::log << LOGSTAMP << xeekworx::logtype::WARNING << "Failed in API Configuration Stage 3!" << std::endl;
+				exitcode = 1;
+			}
+
 			// STOPWATCH:
 			auto end_clock = tools::clock::now();
 			xeekworx::log << LOGSTAMP << "Startup took " << tools::friendly_duration(start_clock, end_clock) << " to complete" << std::endl;
@@ -138,7 +158,7 @@ int application::run(int argc, char *argv[])
 	// SHUTDOWN:
 	auto start_shutdown_clock = tools::clock::now();
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Shutting down APIs ..." << std::endl;
-	close_apis();
+	shutdown_apis();
 	if (m_display) { // Destroy the game window
 		delete m_display;
 		m_display = nullptr;
@@ -167,7 +187,7 @@ bool application::create_display(const display_setup& setup)
 	return true;
 }
 
-bool application::setup_apis()
+bool application::setup_apis1()
 {
 	// INITIALIZE SDL:
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -176,10 +196,58 @@ bool application::setup_apis()
 	}
 	else xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "SDL Initialized Successfully" << std::endl;
 
+
+
 	return true;
 }
 
-void application::close_apis()
+bool application::setup_apis2(const graphics_setup& gfx_setup)
+{
+	bool result = true; // true for success
+
+	// CONFIGURE OPENGL ATTRIBUTES:
+	std::unordered_map<SDL_GLattr, int> attributes;
+	attributes[SDL_GL_CONTEXT_FLAGS] = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
+	attributes[SDL_GL_CONTEXT_PROFILE_MASK] = SDL_GL_CONTEXT_PROFILE_CORE;
+	attributes[SDL_GL_CONTEXT_MAJOR_VERSION] = 4;
+	attributes[SDL_GL_CONTEXT_MINOR_VERSION] = 1;
+	attributes[SDL_GL_RED_SIZE] = 8;
+	attributes[SDL_GL_GREEN_SIZE] = 8;
+	attributes[SDL_GL_BLUE_SIZE] = 8;
+	attributes[SDL_GL_ALPHA_SIZE] = 8;
+	attributes[SDL_GL_DEPTH_SIZE] = 24;
+	attributes[SDL_GL_STENCIL_SIZE] = 8;
+	attributes[SDL_GL_DOUBLEBUFFER] = 1;
+	attributes[SDL_GL_MULTISAMPLEBUFFERS] = gfx_setup.msaa ? 1 : 0;
+	attributes[SDL_GL_MULTISAMPLESAMPLES] = gfx_setup.msaa_samples;
+	attributes[SDL_GL_SHARE_WITH_CURRENT_CONTEXT] = 1;
+
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "Configuring OpenGL Attributes ... " << std::endl;
+	for (auto i = attributes.begin(); i != attributes.end(); ++i) {
+		result |= (0 != SDL_GL_SetAttribute((*i).first, (*i).second));
+		if (!result) xeekworx::log << LOGSTAMP << xeekworx::ERR << "> FAIL : ";
+		else xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "> OK : ";
+		xeekworx::log << std::setw(34) << std::left << sdltools::SDL_GLattrToString((*i).first) << " = ";
+		switch ((*i).first) {
+		case SDL_GL_CONTEXT_FLAGS: xeekworx::log << sdltools::SDL_GLcontextFlagToString((*i).second); break;
+		case SDL_GL_CONTEXT_PROFILE_MASK: xeekworx::log << sdltools::SDL_GLprofileToString((*i).second); break;
+		case SDL_GL_CONTEXT_RELEASE_BEHAVIOR: xeekworx::log << sdltools::SDL_GLcontextReleaseFlagToString((*i).second); break;
+		default: xeekworx::log << (*i).second; break;
+		}
+		xeekworx::log << std::endl;
+	}
+
+	return result;
+}
+
+bool application::setup_apis3(const graphics_setup& gfx_setup)
+{
+
+
+	return true;
+}
+
+void application::shutdown_apis()
 {
 	// UNINITIALIZE SDL:
 	SDL_Quit();

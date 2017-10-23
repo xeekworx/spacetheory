@@ -14,13 +14,13 @@ demo_application::~demo_application()
 	applog << LOGSTAMP << xeekworx::DEBUG << "Demo application destructed" << std::endl;
 }
 
-bool demo_application::on_start(const std::vector<std::string>& args, spacetheory::display_setup& setup)
+bool demo_application::on_start(const std::vector<std::string>& args, spacetheory::display_setup& disp_setup, spacetheory::graphics_setup& gfx_setup)
 {
 	applog << LOGSTAMP << xeekworx::DEBUG << "Starting..." << std::endl;
 
-	setup.on_screen = 0;
-	setup.mode = spacetheory::window_mode::windowed;
-	setup.name = "Spacetheory Demo Application";
+	disp_setup.on_screen = 0;
+	disp_setup.mode = spacetheory::window_mode::windowed;
+	disp_setup.name = "Spacetheory Demo Application";
 
 	return true;
 }
