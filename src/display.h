@@ -13,6 +13,7 @@ namespace spacetheory {
 		friend spacetheory::application;
 	private:
 		void * m_sdlwindow;
+		void * m_glcontext;
 
 		display(const display_setup& setup);
 

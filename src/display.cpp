@@ -5,7 +5,7 @@
 
 using namespace spacetheory;
 
-display::display(const display_setup& setup) : m_sdlwindow(nullptr)
+display::display(const display_setup& setup) : m_sdlwindow(nullptr), m_glcontext(nullptr)
 {
 	// LOG BOUNDS:
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG << "Game window setup ..." << std::endl;
@@ -73,6 +73,10 @@ display::display(const display_setup& setup) : m_sdlwindow(nullptr)
 
 display::~display()
 {
+	if (m_glcontext) {
+		SDL_GL_DeleteContext((SDL_GLContext)m_glcontext);
+		m_glcontext = nullptr;
+	}
 	if (m_sdlwindow) {
 		SDL_DestroyWindow((SDL_Window*)m_sdlwindow);
 		m_sdlwindow = nullptr;

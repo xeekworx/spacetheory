@@ -36,6 +36,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\application.cpp" />
     <ClCompile Include="..\..\src\display.cpp" />
+    <ClCompile Include="..\..\src\third-party\glad\src\glad.c" />
     <ClCompile Include="..\..\src\third-party\logger\logger.cpp" />
     <ClCompile Include="..\..\src\tools.cpp" />
     <ClCompile Include="..\..\src\version.cpp" />

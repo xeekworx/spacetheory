@@ -157,12 +157,14 @@ int application::run(int argc, char *argv[])
 
 	// SHUTDOWN:
 	auto start_shutdown_clock = tools::clock::now();
-	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Shutting down APIs ..." << std::endl;
-	shutdown_apis();
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Destroying display (game window) ..." << std::endl;
 	if (m_display) { // Destroy the game window
 		delete m_display;
 		m_display = nullptr;
 	}
+	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Shutting down APIs ..." << std::endl;
+	shutdown_apis();
+
 	xeekworx::log << LOGSTAMP << "Shutdown took " << tools::friendly_duration(start_shutdown_clock, tools::clock::now()) << " to complete" << std::endl;
 
 	// STOPWATCH:
@@ -189,6 +191,10 @@ bool application::create_display(const display_setup& setup)
 
 bool application::setup_apis1()
 {
+	// ------------------------------------------------------------------------
+	// STAGE 1, before any apis have initialized
+	// ------------------------------------------------------------------------
+
 	// INITIALIZE SDL:
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		xeekworx::log << LOGSTAMP << xeekworx::ERR << "SDL Initialization Failed (" << SDL_GetError() << ")" << std::endl;
@@ -203,14 +209,18 @@ bool application::setup_apis1()
 
 bool application::setup_apis2(const graphics_setup& gfx_setup)
 {
+	// ------------------------------------------------------------------------
+	// STAGE 2, before the window (display) is created
+	// ------------------------------------------------------------------------
+
 	bool result = true; // true for success
 
 	// CONFIGURE OPENGL ATTRIBUTES:
 	std::unordered_map<SDL_GLattr, int> attributes;
 	attributes[SDL_GL_CONTEXT_FLAGS] = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
 	attributes[SDL_GL_CONTEXT_PROFILE_MASK] = SDL_GL_CONTEXT_PROFILE_CORE;
-	attributes[SDL_GL_CONTEXT_MAJOR_VERSION] = 4;
-	attributes[SDL_GL_CONTEXT_MINOR_VERSION] = 1;
+	attributes[SDL_GL_CONTEXT_MAJOR_VERSION] = gfx_setup.glversion_major;
+	attributes[SDL_GL_CONTEXT_MINOR_VERSION] = gfx_setup.glversion_minor;
 	attributes[SDL_GL_RED_SIZE] = 8;
 	attributes[SDL_GL_GREEN_SIZE] = 8;
 	attributes[SDL_GL_BLUE_SIZE] = 8;
@@ -220,14 +230,14 @@ bool application::setup_apis2(const graphics_setup& gfx_setup)
 	attributes[SDL_GL_DOUBLEBUFFER] = 1;
 	attributes[SDL_GL_MULTISAMPLEBUFFERS] = gfx_setup.msaa ? 1 : 0;
 	attributes[SDL_GL_MULTISAMPLESAMPLES] = gfx_setup.msaa_samples;
-	attributes[SDL_GL_SHARE_WITH_CURRENT_CONTEXT] = 1;
+	//attributes[SDL_GL_SHARE_WITH_CURRENT_CONTEXT] = 1;
 
 	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "Configuring OpenGL Attributes ... " << std::endl;
 	for (auto i = attributes.begin(); i != attributes.end(); ++i) {
 		result |= (0 != SDL_GL_SetAttribute((*i).first, (*i).second));
-		if (!result) xeekworx::log << LOGSTAMP << xeekworx::ERR << "> FAIL : ";
+		if (!result) xeekworx::log << LOGSTAMP << xeekworx::WARNING << "> FAIL : ";
 		else xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "> OK : ";
-		xeekworx::log << std::setw(34) << std::left << sdltools::SDL_GLattrToString((*i).first) << " = ";
+		xeekworx::log << std::setw(30) << std::left << sdltools::SDL_GLattrToString((*i).first) << " = ";
 		switch ((*i).first) {
 		case SDL_GL_CONTEXT_FLAGS: xeekworx::log << sdltools::SDL_GLcontextFlagToString((*i).second); break;
 		case SDL_GL_CONTEXT_PROFILE_MASK: xeekworx::log << sdltools::SDL_GLprofileToString((*i).second); break;
@@ -242,9 +252,115 @@ bool application::setup_apis2(const graphics_setup& gfx_setup)
 
 bool application::setup_apis3(const graphics_setup& gfx_setup)
 {
+	// ------------------------------------------------------------------------
+	// STAGE 1, after the window (display) was created
+	// ------------------------------------------------------------------------
 
+	// CREATE THE OPENGL CONTEXT:
+	SDL_GLContext new_glcontext = SDL_GL_CreateContext((SDL_Window *)m_display->m_sdlwindow);
+	if (new_glcontext == NULL) {
+		xeekworx::log << LOGSTAMP << xeekworx::FATAL << "Failed to create OpenGL context" << std::endl;
+		return false;
+	}
+	else {
+		m_display->m_glcontext = new_glcontext;
+		xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "OpenGL context created successfully" << std::endl;
+	}
 
-	return true;
+	// LOG ACTUAL POST OPENGL CONTEXT CREATION ATTRIBUTES:
+	bool result = true;
+	std::unordered_map<SDL_GLattr, int> attributes;
+	attributes[SDL_GL_CONTEXT_FLAGS] = 0;
+	attributes[SDL_GL_CONTEXT_PROFILE_MASK] = 0;
+	attributes[SDL_GL_CONTEXT_MAJOR_VERSION] = 0;
+	attributes[SDL_GL_CONTEXT_MINOR_VERSION] = 0;
+	attributes[SDL_GL_RED_SIZE] = 0;
+	attributes[SDL_GL_GREEN_SIZE] = 0;
+	attributes[SDL_GL_BLUE_SIZE] = 0;
+	attributes[SDL_GL_ALPHA_SIZE] = 0;
+	attributes[SDL_GL_DEPTH_SIZE] = 0;
+	attributes[SDL_GL_STENCIL_SIZE] = 0;
+	attributes[SDL_GL_DOUBLEBUFFER] = 0;
+	attributes[SDL_GL_MULTISAMPLEBUFFERS] = 0;
+	attributes[SDL_GL_MULTISAMPLESAMPLES] = 0;
+	//attributes[SDL_GL_SHARE_WITH_CURRENT_CONTEXT] = 0;
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "Actual OpenGL Attributes: " << std::endl;
+	for (auto i = attributes.begin(); i != attributes.end(); ++i) {
+		result |= (0 != SDL_GL_GetAttribute((*i).first, &(*i).second));
+		if (!result) xeekworx::log << LOGSTAMP << xeekworx::WARNING << "> FAIL : ";
+		else xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "> OK : ";
+		xeekworx::log << std::setw(30) << std::left << sdltools::SDL_GLattrToString((*i).first) << " = ";
+		switch ((*i).first) {
+		case SDL_GL_CONTEXT_FLAGS: xeekworx::log << sdltools::SDL_GLcontextFlagToString((*i).second); break;
+		case SDL_GL_CONTEXT_PROFILE_MASK: xeekworx::log << sdltools::SDL_GLprofileToString((*i).second); break;
+		case SDL_GL_CONTEXT_RELEASE_BEHAVIOR: xeekworx::log << sdltools::SDL_GLcontextReleaseFlagToString((*i).second); break;
+		default: xeekworx::log << (*i).second; break;
+		}
+		xeekworx::log << std::endl;
+	}
+
+	// INITIALIZE GLAD:
+	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+		xeekworx::log << LOGSTAMP << xeekworx::FATAL << "Failed to initialize GLAD" << std::endl;
+		SDL_GL_DeleteContext(m_display->m_glcontext);
+		m_display->m_glcontext = nullptr;
+		return false;
+	}
+	else {
+		xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "GLAD initialized successfully" << std::endl;
+	}
+
+	// LOG OPENGL VERSION, VENDOR (IMPLEMENTATION), RENDERER, GLSL, ETC.:
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << std::setw(34) << std::left << "OpenGL Version: " << GLVersion.major << "." << GLVersion.minor << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << std::setw(34) << std::left << "OpenGL Shading Language Version: " << (char *)glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << std::setw(34) << std::left << "OpenGL Vendor:" << (char *)glGetString(GL_VENDOR) << std::endl;
+	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << std::setw(34) << std::left << "OpenGL Renderer:" << (char *)glGetString(GL_RENDERER) << std::endl;
+
+	// LOG OPENGL PARAMETERS:
+	struct gl_param {
+		std::string name; GLenum param; unsigned num_values; bool integer;
+		operator GLenum() const { return param; }
+	};
+	std::vector<gl_param> parameters;
+	parameters.push_back(gl_param{ "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS", GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_CUBE_MAP_TEXTURE_SIZE", GL_MAX_CUBE_MAP_TEXTURE_SIZE, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_DRAW_BUFFERS", GL_MAX_DRAW_BUFFERS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_FRAGMENT_UNIFORM_COMPONENTS", GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_TEXTURE_IMAGE_UNITS", GL_MAX_TEXTURE_IMAGE_UNITS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_TEXTURE_SIZE", GL_MAX_TEXTURE_SIZE, 1, true });
+	//parameters.push_back(gl_param { "GL_MAX_VARYING_FLOATS", GL_MAX_VARYING_FLOATS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_VERTEX_ATTRIBS", GL_MAX_VERTEX_ATTRIBS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS", GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_VERTEX_UNIFORM_COMPONENTS", GL_MAX_VERTEX_UNIFORM_COMPONENTS, 1, true });
+	parameters.push_back(gl_param{ "GL_MAX_VIEWPORT_DIMS", GL_MAX_VIEWPORT_DIMS, 2, true });
+	parameters.push_back(gl_param{ "GL_STEREO", GL_STEREO, 1, false });
+	parameters.push_back(gl_param{ "GL_DOUBLEBUFFER", GL_DOUBLEBUFFER, 1, false });
+	//parameters.push_back(gl_param { "GL_MAX_LIGHTS", GL_MAX_LIGHTS, 1, true }); // For GL 4+
+	parameters.push_back(gl_param{ "GL_VIEWPORT", GL_VIEWPORT, 4, true });
+
+	xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "OpenGL Context Parameters: " << std::endl;
+	for (auto i = parameters.begin(); i != parameters.end(); ++i) {
+		xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << "> " << std::setw(35) << std::left << (*i).name << " = ";
+		std::vector<GLint> values((*i).num_values);
+		glGetIntegerv((*i).param, values.data());
+		if (glGetError() != GL_NO_ERROR) xeekworx::log << "ERROR";
+		else {
+			for (auto v = values.begin(); v != values.end(); v++) {
+				if ((*i).num_values > 1 && v != values.begin()) xeekworx::log << ", ";
+				if ((*i).integer) xeekworx::log << (*v);
+				else xeekworx::log << ((*v) ? "TRUE" : "FALSE");
+			}
+		}
+		xeekworx::log << std::endl;
+	}
+
+	// CONFIGURE VSYNC:
+	if (SDL_GL_SetSwapInterval(gfx_setup.vsync ? 1 : 0) < 0) {
+		xeekworx::log << LOGSTAMP << xeekworx::WARNING << "Unable to " << (gfx_setup.vsync ? "enable" : "disable") << " VSync. SDL Error: \"" << SDL_GetError() << "\"" << std::endl;
+	}
+	else xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << (gfx_setup.vsync ? "Enabled Vertical Sync" : "Disabled Vertical Sync") << std::endl;
+
+	return result;
 }
 
 void application::shutdown_apis()
