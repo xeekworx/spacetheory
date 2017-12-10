@@ -21,3 +21,6 @@
 [submodule "tools/autoversion"]
 	path = tools/autoversion
 	url = https://github.com/xeekworx/autoversion.git
+[submodule "src/third-party/rapidjson"]
+	path = src/third-party/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
