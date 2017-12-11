@@ -84,3 +84,13 @@ display::~display()
 
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::DEBUG2 << "Game window destroyed" << std::endl;
 }
+
+void display::make_current() const
+{
+	SDL_GL_MakeCurrent((SDL_Window*)m_sdlwindow, (SDL_GLContext)m_glcontext);
+}
+
+void display::present() const
+{
+	SDL_GL_SwapWindow((SDL_Window*)m_sdlwindow);
+}

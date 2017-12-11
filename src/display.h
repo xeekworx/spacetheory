@@ -19,6 +19,9 @@ namespace spacetheory {
 
 	public:
 		~display();
+
+		void make_current() const;
+		void present() const;
 	};
 
 }

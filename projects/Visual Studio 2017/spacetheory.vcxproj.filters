@@ -50,6 +50,10 @@
     <ClInclude Include="..\..\src\graphics_setup.h">
       <Filter>Types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\graphics2d.h" />
+    <ClInclude Include="..\..\src\corner_radius.h">
+      <Filter>Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\third-party\logger\logger.cpp">
@@ -62,6 +66,10 @@
     <ClCompile Include="..\..\src\display.cpp" />
     <ClCompile Include="..\..\src\tools.cpp" />
     <ClCompile Include="..\..\src\third-party\glad\src\glad.c">
+      <Filter>3rdparty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics2d.cpp" />
+    <ClCompile Include="..\..\src\third-party\nanovg\src\nanovg.c">
       <Filter>3rdparty</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,6 +11,7 @@
 #include "error.h"
 #include <unordered_map>
 #include <iomanip>
+#include "graphics2d.h"
 
 namespace spacetheory {
 	application * application::s_app = nullptr;
@@ -155,6 +156,9 @@ int application::run(int argc, char *argv[])
 		}
 	}
 
+	// LOG OPENGL ERRORS:
+	check_glerrors();
+
 	// SHUTDOWN:
 	auto start_shutdown_clock = tools::clock::now();
 	xeekworx::log << LOGSTAMP << xeekworx::logtype::NOTICE << "Destroying display (game window) ..." << std::endl;
@@ -264,6 +268,7 @@ bool application::setup_apis3(const graphics_setup& gfx_setup)
 	}
 	else {
 		m_display->m_glcontext = new_glcontext;
+		m_display->make_current();
 		xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "OpenGL context created successfully" << std::endl;
 	}
 
@@ -354,11 +359,17 @@ bool application::setup_apis3(const graphics_setup& gfx_setup)
 		xeekworx::log << std::endl;
 	}
 
+	// LOG OPENGL ERRORS:
+	check_glerrors();
+
 	// CONFIGURE VSYNC:
 	if (SDL_GL_SetSwapInterval(gfx_setup.vsync ? 1 : 0) < 0) {
 		xeekworx::log << LOGSTAMP << xeekworx::WARNING << "Unable to " << (gfx_setup.vsync ? "enable" : "disable") << " VSync. SDL Error: \"" << SDL_GetError() << "\"" << std::endl;
 	}
 	else xeekworx::log << LOGSTAMP << xeekworx::DEBUG2 << (gfx_setup.vsync ? "Enabled Vertical Sync" : "Disabled Vertical Sync") << std::endl;
+
+
+	g = std::make_unique<graphics2d>();
 
 	return result;
 }
@@ -368,6 +379,19 @@ void application::shutdown_apis()
 	// UNINITIALIZE SDL:
 	SDL_Quit();
 	xeekworx::log << LOGSTAMP << xeekworx::DEBUG << "SDL Shutdown" << std::endl;
+}
+
+bool application::check_glerrors(bool log)
+{
+	// LOG OPENGL ERRORS:
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR) {
+		if (log) {
+			xeekworx::log << LOGSTAMP << xeekworx::WARNING << "OpenGL error in queue: \"" << gltools::GL_ErrorToString(err) << "\"" << std::endl;
+		}
+		return true;
+	}
+	return false;
 }
 
 void application::shutdown()
@@ -386,6 +410,9 @@ void application::game_loop()
 
 		// Rendering magic:
 		on_frame();
+
+		// Present:
+		m_display->present();
 	}
 
 	xeekworx::log << LOGSTAMP << xeekworx::NOTICE << "Game Loop Ended" << std::endl;
@@ -420,5 +447,8 @@ bool application::event_loop()
 
 void application::on_frame()
 {
-
+	g->begin();
+	g->clear(graphics2d::green);
+	g->test();
+	g->end();
 }
