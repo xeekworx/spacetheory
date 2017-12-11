@@ -221,7 +221,11 @@ bool application::setup_apis2(const graphics_setup& gfx_setup)
 
 	// CONFIGURE OPENGL ATTRIBUTES:
 	std::unordered_map<SDL_GLattr, int> attributes;
+#ifdef _DEBUG
+	attributes[SDL_GL_CONTEXT_FLAGS] = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG | SDL_GL_CONTEXT_DEBUG_FLAG;
+#else
 	attributes[SDL_GL_CONTEXT_FLAGS] = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
+#endif
 	attributes[SDL_GL_CONTEXT_PROFILE_MASK] = SDL_GL_CONTEXT_PROFILE_CORE;
 	attributes[SDL_GL_CONTEXT_MAJOR_VERSION] = gfx_setup.glversion_major;
 	attributes[SDL_GL_CONTEXT_MINOR_VERSION] = gfx_setup.glversion_minor;
@@ -448,7 +452,7 @@ bool application::event_loop()
 void application::on_frame()
 {
 	g->begin();
-	g->clear(graphics2d::green);
+	g->clear(graphics2d::black);
 	g->test();
 	g->end();
 }

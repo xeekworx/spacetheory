@@ -19,7 +19,7 @@ const glm::vec4 spacetheory::graphics2d::green(0.0f, 1.0f, 0.4f, 1.0f);
 const glm::vec4 spacetheory::graphics2d::blue(0.0f, 0.2f, 1.0f, 1.0f);
 
 graphics2d::graphics2d(const bool antialias)
-	: m_fbo(nullptr), m_width(0.0f), m_height(0.0f), m_ready(false)
+	: m_fbo(nullptr), m_width(0.0f), m_height(0.0f), m_ready(false), m_antialias(antialias)
 {
 	graphics2d::create_nvg_context();
 
@@ -30,7 +30,7 @@ graphics2d::graphics2d(const bool antialias)
 }
 
 graphics2d::graphics2d(const uint32_t width, const uint32_t height, const bool antialias)
-	: m_fbo(nullptr), m_width(0.0f), m_height(0.0f), m_ready(false)
+	: m_fbo(nullptr), m_width(0.0f), m_height(0.0f), m_ready(false), m_antialias(antialias)
 {
 	graphics2d::create_nvg_context();
 
@@ -94,7 +94,7 @@ void graphics2d::begin()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// BEGIN NANOVG DRAWING:
-		nvgBeginFrame(nvg_context, (int) m_width, (int) m_height, 1.0f);
+		nvgBeginFrame(nvg_context, (int) m_width, (int) m_height, 1.f);
 
 		m_ready = true;
 	}
@@ -123,15 +123,21 @@ void graphics2d::end()
 	}
 }
 
+void graphics2d::cancel()
+{
+	nvgCancelFrame(nvg_context);
+}
+
 void graphics2d::test()
 {
-	//clear(spacetheory::glm::vec4(0xFF000000));
 	if(is_ready()) {
 		//nvgReset(nvg_context);
 		nvgBeginPath(nvg_context);
 		nvgRect(nvg_context, 0, 0, 150, 150);
-		nvgFillColor(nvg_context, nvgRGBA(0, 255, 100, 100));
+		nvgFillColor(nvg_context, nvgRGBA(0, 255, 100, 255));
 		nvgFill(nvg_context);
+
+		draw_roundrect(rectangle(200, 200, 150, 150), corner_radius(20.0f), 1.f, green, green);
 	}
 }
 
@@ -191,9 +197,11 @@ void graphics2d::draw_rect(rectangle& rect, const float border_width, const glm:
 	nvgStrokeWidth(vg, border_width);
 	nvgStrokeColor(vg, nvg_stroke_color);
 	nvgStroke(vg);
-	nvgFillColor(vg, nvg_fill_color);
-	//nvgFillPaint(vg, gradient);
-	nvgFill(vg);
+	if (fill_color != transparent) {
+		nvgFillColor(vg, nvg_fill_color);
+		//nvgFillPaint(vg, gradient);
+		nvgFill(vg);
+	}
 }
 
 void graphics2d::draw_rect(rectangle& rect, const glm::vec4& border_color, const glm::vec4& fill_color)
@@ -214,12 +222,14 @@ void graphics2d::draw_roundrect(rectangle& rect, const corner_radius& radius, co
 
 	nvgBeginPath(vg);
 	nvgRoundedRectVarying(
-		vg, 
-		(float) rect.x, (float) rect.y, (float) rect.w, (float) rect.h, 
+		vg,
+		(float)rect.x, (float)rect.y, (float)rect.w, (float)rect.h,
 		radius.topleft(), radius.topright(), radius.bottomright(), radius.bottomleft()
 	);
-	nvgFillColor(vg, nvg_fill_color);
-	nvgFill(vg);
+	if (fill_color != transparent) {
+		nvgFillColor(vg, nvg_fill_color);
+		nvgFill(vg);
+	}
 	nvgStrokeWidth(vg, border_width);
 	nvgStrokeColor(vg, nvg_stroke_color);
 	nvgStroke(vg);

@@ -12,6 +12,7 @@ namespace spacetheory {
 		void * m_fbo; // NanoVG Frame Buffer
 		float m_width, m_height;
 		bool m_ready;
+		bool m_antialias;
 
 		struct glstate {
 			float viewport[4];
@@ -31,6 +32,7 @@ namespace spacetheory {
 
 		void begin();
 		void end();
+		void cancel();
 			
 		void clear(const glm::vec4& c);
 
