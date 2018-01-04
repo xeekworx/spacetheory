@@ -195,9 +195,9 @@ bool application::create_display(const display_setup& setup)
 
 bool application::setup_apis1()
 {
-	// ------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
 	// STAGE 1, before any apis have initialized
-	// ------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
 
 	// INITIALIZE SDL:
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -213,9 +213,9 @@ bool application::setup_apis1()
 
 bool application::setup_apis2(const graphics_setup& gfx_setup)
 {
-	// ------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
 	// STAGE 2, before the window (display) is created
-	// ------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
 
 	bool result = true; // true for success
 
@@ -260,9 +260,9 @@ bool application::setup_apis2(const graphics_setup& gfx_setup)
 
 bool application::setup_apis3(const graphics_setup& gfx_setup)
 {
-	// ------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
 	// STAGE 1, after the window (display) was created
-	// ------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
 
 	// CREATE THE OPENGL CONTEXT:
 	SDL_GLContext new_glcontext = SDL_GL_CreateContext((SDL_Window *)m_display->m_sdlwindow);

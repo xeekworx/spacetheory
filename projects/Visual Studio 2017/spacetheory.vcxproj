@@ -50,7 +50,7 @@
     <ProjectGuid>{20D7639C-A0B3-4365-83FA-368E5D906084}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>spacetheory</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
