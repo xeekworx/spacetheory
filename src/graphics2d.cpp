@@ -18,6 +18,8 @@ const glm::vec4 spacetheory::graphics2d::red(1.0f, 0.0f, 0.0f, 1.0f);
 const glm::vec4 spacetheory::graphics2d::green(0.0f, 1.0f, 0.4f, 1.0f);
 const glm::vec4 spacetheory::graphics2d::blue(0.0f, 0.2f, 1.0f, 1.0f);
 
+static int testimage = 0;
+
 graphics2d::graphics2d(const bool antialias)
 	: m_fbo(nullptr), m_width(0.0f), m_height(0.0f), m_ready(false), m_antialias(antialias)
 {
@@ -27,6 +29,8 @@ graphics2d::graphics2d(const bool antialias)
 	glGetFloatv(GL_VIEWPORT, &v[0]);
 	m_width = v[2];
 	m_height = v[3];
+
+    testimage = nvgCreateImage(nvg_context, "test.png", 0);
 }
 
 graphics2d::graphics2d(const uint32_t width, const uint32_t height, const bool antialias)
@@ -132,12 +136,21 @@ void graphics2d::test()
 {
 	if(is_ready()) {
 		//nvgReset(nvg_context);
-		nvgBeginPath(nvg_context);
-		nvgRect(nvg_context, 0, 0, 150, 150);
-		nvgFillColor(nvg_context, nvgRGBA(0, 255, 100, 255));
-		nvgFill(nvg_context);
+		//nvgBeginPath(nvg_context);
+		//nvgRect(nvg_context, 0, 0, 150, 150);
+		//nvgFillColor(nvg_context, nvgRGBA(0, 255, 100, 255));
+		//nvgFill(nvg_context);
 
-		draw_roundrect(rectangle(200, 200, 150, 150), corner_radius(20.0f), 1.f, green, green);
+		//draw_roundrect(rectangle(200, 200, 150, 150), corner_radius(20.0f), 1.f, green, green);
+
+        NVGpaint paint_img = nvgImagePattern(nvg_context, 0, 0, 256, 256, 0.0f, testimage, 1.0f);
+        nvgBeginPath(nvg_context);
+        nvgRect(nvg_context, 0, 0, 256, 256);
+        // https://github.com/memononen/nanovg/issues/450
+        paint_img.innerColor = nvgRGBA(0, 255, 100, 255);
+        nvgFillPaint(nvg_context, paint_img);
+
+        nvgFill(nvg_context);
 	}
 }
 

@@ -21,6 +21,7 @@ bool demo_application::on_start(const std::vector<std::string>& args, spacetheor
 	disp_setup.on_screen = 0;
 	disp_setup.mode = spacetheory::window_mode::windowed;
 	disp_setup.name = "Spacetheory Demo Application";
+    gfx_setup.vsync = false;
 
 	return true;
 }

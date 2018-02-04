@@ -452,7 +452,7 @@ bool application::event_loop()
 void application::on_frame()
 {
 	g->begin();
-	g->clear(graphics2d::black);
+	g->clear(graphics2d::white);
 	g->test();
 	g->end();
 }

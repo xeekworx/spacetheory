@@ -12,9 +12,9 @@
 #endif
 
 #define SPACETHEORY_DEVSTAGE			"Alpha"
-#define SPACETHEORY_BUILDDATE			1514070491
-#define SPACETHEORY_PRODUCTVERSION		0,17,1223,170
-#define SPACETHEORY_STRPRODUCTVERSION	"0.17.1223.170\0"
+#define SPACETHEORY_BUILDDATE			1516556697
+#define SPACETHEORY_PRODUCTVERSION		0,18,121,184
+#define SPACETHEORY_STRPRODUCTVERSION	"0.18.121.184\0"
 #define SPACETHEORY_FILEVERSION			SPACETHEORY_PRODUCTVERSION
 #define SPACETHEORY_STRFILEVERSION		SPACETHEORY_STRPRODUCTVERSION
 #define SPACETHEORY_FILEDESC			"Space Theory Game Engine"
@@ -24,8 +24,8 @@
 #define SPACETHEORY_WWW					"http://xeekworx.com/"
 #define SPACETHEORY_GIT					"https://github.com/xeekworx/spacetheory"
 #define SPACETHEORY_COMPANY				"Xeekworx\0"
-#define SPACETHEORY_COPYRIGHT			"Copyright © 2017 John Tullos. All Rights Reserved.\0"
-#define SPACETHEORY_COPYRIGHT_SHORT		"Copyright © 2017 John Tullos.\0"
+#define SPACETHEORY_COPYRIGHT			"Copyright © 2018 John Tullos. All Rights Reserved.\0"
+#define SPACETHEORY_COPYRIGHT_SHORT		"Copyright © 2018 John Tullos.\0"
 
 #define SPACETHEORY_LOGFILE				"engine.log"
 
