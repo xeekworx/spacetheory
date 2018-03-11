@@ -54,6 +54,12 @@
     <ClInclude Include="..\..\src\corner_radius.h">
       <Filter>Types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\color.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\html_colors.h">
+      <Filter>Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\third-party\logger\logger.cpp">

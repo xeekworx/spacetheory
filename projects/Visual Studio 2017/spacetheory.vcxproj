@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\spacetheory.h" />
     <ClInclude Include="..\..\src\application.h" />
+    <ClInclude Include="..\..\src\color.h" />
     <ClInclude Include="..\..\src\corner_radius.h" />
     <ClInclude Include="..\..\src\display.h" />
     <ClInclude Include="..\..\src\display_setup.h" />
     <ClInclude Include="..\..\src\error.h" />
     <ClInclude Include="..\..\src\graphics2d.h" />
     <ClInclude Include="..\..\src\graphics_setup.h" />
+    <ClInclude Include="..\..\src\html_colors.h" />
     <ClInclude Include="..\..\src\point.h" />
     <ClInclude Include="..\..\src\rectangle.h" />
     <ClInclude Include="..\..\src\size.h" />

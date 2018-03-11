@@ -4,8 +4,8 @@
 #include <string>
 
 namespace spacetheory {
-	struct version { unsigned int major, minor, revision, build;  };
+    struct version { unsigned int major, minor, revision, build;  };
 
-	version get_version();
-	std::string get_builddate();
+    version get_version();
+    std::string get_builddate();
 }

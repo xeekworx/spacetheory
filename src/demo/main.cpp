@@ -8,5 +8,5 @@ int main(int argc, char *argv[])
         std::unique_ptr<demo_application> app = std::make_unique<demo_application>();
         exitcode = app->run(argc, argv);
     }
-	return exitcode;
+    return exitcode;
 }

@@ -6,22 +6,22 @@
 
 namespace spacetheory {
 
-	class application;
+    class application;
 
-	class display
-	{
-		friend spacetheory::application;
-	private:
-		void * m_sdlwindow;
-		void * m_glcontext;
+    class display
+    {
+        friend spacetheory::application;
+    private:
+        void * m_sdlwindow;
+        void * m_glcontext;
 
-		display(const display_setup& setup);
+        display(const display_setup& setup);
 
-	public:
-		~display();
+    public:
+        ~display();
 
-		void make_current() const;
-		void present() const;
-	};
+        void make_current() const;
+        void present() const;
+    };
 
 }
